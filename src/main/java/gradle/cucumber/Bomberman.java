@@ -1,8 +1,9 @@
 package gradle.cucumber;
 
-public class Bomberman implements Item {
+import java.util.List;
 
-    private final Maze maze;
+public class Bomberman extends Item {
+
 
     /**
      * Constructor para crear un nuevo {@link Bomberman}.
@@ -10,11 +11,12 @@ public class Bomberman implements Item {
      * @param maze
      * */
     public Bomberman(Maze maze) {
-        this.maze = maze;
+        super(maze);
     }
 
-    public void move(Direction direction) {
-        this.maze.move(this, direction);
+    @Override
+    protected void interactsWith(Item otherItem) {
+        // no pasa nada cuando otro item interactua con bomberman
     }
 
 }

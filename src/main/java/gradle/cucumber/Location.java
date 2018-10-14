@@ -1,5 +1,6 @@
 package gradle.cucumber;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ public abstract class Location {
     public Location(int xCoord, int yCoord) {
         this.xCoord = xCoord;
         this.yCoord = yCoord;
+        this.items = new ArrayList<>();
     }
 
     public int getXCoordinate() {
@@ -22,19 +24,19 @@ public abstract class Location {
         return this.yCoord;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Location location = (Location) o;
-        return yCoord == location.yCoord &&
-                xCoord == location.xCoord;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(yCoord, xCoord);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Location location = (Location) o;
+//        return yCoord == location.yCoord &&
+//                xCoord == location.xCoord;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(yCoord, xCoord);
+//    }
 
     public abstract boolean canEnter();
 
@@ -52,5 +54,9 @@ public abstract class Location {
      * */
     public void enter(Item item) {
         this.items.add(item);
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 }
