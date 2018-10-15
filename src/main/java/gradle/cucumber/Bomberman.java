@@ -33,10 +33,12 @@ public class Bomberman extends Item {
     }
 
     public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction){
-        Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
-        bomb.setTicksController(ticksController);
-        ticksController.addBomb(bomb);
-        bomb.moveXToDir(cant, direction);
+        if (this.hasThrowBombPower()){
+            Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
+            bomb.setTicksController(ticksController);
+            ticksController.addBomb(bomb);
+            bomb.moveXToDir(cant, direction);
+        }
     }
 
     public void addPower(Power power){
