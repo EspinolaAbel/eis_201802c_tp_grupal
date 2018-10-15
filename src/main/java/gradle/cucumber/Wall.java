@@ -1,14 +1,18 @@
 package gradle.cucumber;
 
-public class Wall extends Location {
+public class Wall extends Item {
 
-    public Wall(int xCoord, int yCoord) {
-        super(xCoord, yCoord);
+    public Wall(Maze maze, Location location){
+        super(maze, location);
     }
 
     @Override
-    public boolean canEnter() {
-        return false;
+    public void boom() {
+
     }
 
+    @Override
+    protected void interactsWith(Item otherItem) {
+
+    }
 }

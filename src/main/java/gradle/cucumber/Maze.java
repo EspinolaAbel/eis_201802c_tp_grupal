@@ -11,9 +11,10 @@ public class Maze {
 
     /**
      * Constructor para instanciar un {@link Maze} con dimensión inicial fija
+     *
      * @param height
      * @param width
-     * */
+     */
     public Maze(Integer height, Integer width) {
         this.height = height;
         this.width = width;
@@ -21,8 +22,8 @@ public class Maze {
         // create and fill maze
         this.map = new Location[height][width];
 
-        for (int i = 0; i<height; i++)
-            for (int j = 0; j<width; j++)
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
                 this.map[j][i] = new Ground(i, j); // por defecto, t0do va a ser Ground
     }
 
@@ -32,12 +33,11 @@ public class Maze {
             int xCoord = location.getXCoordinate() + directionWhereToMove.getxCoord();
             int yCoord = location.getYCoordinate() + directionWhereToMove.getyCoord();
 
-            Location nextLocation = this.getLocation(xCoord,yCoord);
+            Location nextLocation = this.getLocation(xCoord, yCoord);
 
             if (nextLocation.canEnter())
                 this.moveItemToLocation(item, nextLocation);
-        }
-        catch(ArrayIndexOutOfBoundsException e) { /* do nothing */ }
+        } catch (ArrayIndexOutOfBoundsException e) { /* do nothing */ }
     }
 
     private void moveItemToLocation(Item item, Location nextLocation) {
@@ -49,7 +49,6 @@ public class Maze {
     }
 
     public Location findItemLocation(Item item) {
-//        Location location = this.itemsLocation.get(item);
         Location aLocation = item.getCurrentLocation();
         if (aLocation == null)
             throw new RuntimeException("El item " + item + " no esta presente en el laberinto");
@@ -59,15 +58,14 @@ public class Maze {
     public void setItemAtLocation(Item item, int xCoordinate, int yCoordinate) {
         Location locationWhereToMove = this.getLocation(xCoordinate, yCoordinate);
         this.moveItemToLocation(item, locationWhereToMove);
-//        this.itemsLocation.put(item, location);
     }
 
     public Location getLocation(int xCoordinate, int yCoordinate) {
         return this.map[yCoordinate][xCoordinate];
     }
 
-    public void setLocationAt(Wall wall, int xCoordinate, int yCoordinate) {
-        this.map[yCoordinate][xCoordinate] = wall;
+    public boolean existLocation(Integer x, Integer y){
+        return x <= this.width && x >= 0 && y <= this.height && y >= 0;
     }
 }
 

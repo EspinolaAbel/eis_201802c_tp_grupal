@@ -1,7 +1,5 @@
 package gradle.cucumber;
 
-import java.util.List;
-
 public class Bomberman extends Item {
 
 
@@ -15,8 +13,17 @@ public class Bomberman extends Item {
     }
 
     @Override
-    protected void interactsWith(Item otherItem) {
-        // no pasa nada cuando otro item interactua con bomberman
+    public void boom() {
+
     }
 
+    @Override
+    protected void interactsWith(Item otherItem) {
+
+    }
+
+    public void dropBomb(Integer ticks, TicksController ticksController) {
+        Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
+        ticksController.addBomb(bomb);
+    }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Location {
+public class Location {
 
     private final int yCoord;
     private final int xCoord;
@@ -24,21 +24,14 @@ public abstract class Location {
         return this.yCoord;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Location location = (Location) o;
-//        return yCoord == location.yCoord &&
-//                xCoord == location.xCoord;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(yCoord, xCoord);
-//    }
+    public boolean canEnter(){
+        boolean hasItem = this.items.stream().anyMatch(i -> i instanceof Wall);
+        return hasItem;
+    }
 
-    public abstract boolean canEnter();
+    public boolean hasItem(Item item){
+        return this.items.contains(item);
+    }
 
     /**
      * The given object is removed from the current {@link Location}
@@ -58,5 +51,17 @@ public abstract class Location {
 
     public List<Item> getItems() {
         return items;
+    }
+
+    public boolean existBomb() {
+        return this.items.stream().anyMatch(i -> i instanceof Bomb);
+    }
+
+    public boolean existWall(){
+        return this.items.stream().anyMatch(i -> i instanceof Wall);
+    }
+
+    public void boom(){
+        this.items.forEach(i -> i.boom());
     }
 }

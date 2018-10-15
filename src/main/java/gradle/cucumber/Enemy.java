@@ -6,6 +6,10 @@ public class Enemy extends Item {
         super(maze);
     }
 
+    public void boom(){
+
+    }
+
     @Override
     protected void interactsWith(Item otherItem) {
         Class<? extends Item> aClass = otherItem.getClass();

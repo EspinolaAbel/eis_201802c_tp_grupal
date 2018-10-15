@@ -13,6 +13,14 @@ public abstract class Item {
         this.alive = true;
     }
 
+    public Item(Maze maze, Location location){
+        this.maze = maze;
+        this.alive = true;
+        this.currentLocation = location;
+    }
+
+    public abstract void boom();
+
     public Location getCurrentLocation() {
         return currentLocation;
     }
