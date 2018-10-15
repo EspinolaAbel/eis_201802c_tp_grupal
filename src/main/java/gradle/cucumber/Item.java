@@ -29,18 +29,27 @@ public abstract class Item {
 
     public void setCurrentLocation(Location newLocation) {
         this.currentLocation = newLocation;
+        this.interact();
     }
 
     public void move(Direction direction) {
         this.maze.move(this, direction);
+        this.interact();
+    }
 
+    public void moveXToDir(Integer cant, Direction direction){
+        for (int i = 0; i < cant; i++) {
+            this.maze.move(this, direction);
+        }
+    }
+
+    private void interact(){
         HashSet<Item> items = this.currentLocation.getItems();
 
         items.stream().forEach((item)->{
             if (!item.equals(this))
                 item.interactsWith(this);
         });
-
     }
 
     public boolean isAlive() {
@@ -52,4 +61,5 @@ public abstract class Item {
     protected void kill() {
         this.alive = false;
     }
+
 }

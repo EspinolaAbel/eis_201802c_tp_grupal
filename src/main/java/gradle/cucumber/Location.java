@@ -2,13 +2,13 @@ package gradle.cucumber;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Location {
 
-    private final int yCoord;
-    private final int xCoord;
+    private int yCoord;
+    private int xCoord;
     private HashSet<Item> items;
 
     public Location(int xCoord, int yCoord) {
@@ -72,5 +72,19 @@ public class Location {
 
     public void boom(){
         this.items.forEach(i -> i.boom());
+        Set<Item> deleteItems = this.items.stream().filter(i -> !i.isAlive()).collect(Collectors.toSet());
+        this.items.removeAll(deleteItems);
+    }
+
+    public boolean existPower() {
+        return this.items.stream().anyMatch(i -> i instanceof Power);
+    }
+
+    public void setyCoord(Integer y){
+        this.yCoord = y;
+    }
+
+    public void setxCoord(Integer x){
+        this.xCoord = x;
     }
 }

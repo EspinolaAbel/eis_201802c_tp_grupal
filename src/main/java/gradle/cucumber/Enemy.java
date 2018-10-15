@@ -10,8 +10,9 @@ public class Enemy extends Item {
         super(maze, location);
     }
 
+    @Override
     public void boom(){
-        this.getCurrentLocation().removeItem(this);
+        this.alive = false;
     }
 
     @Override

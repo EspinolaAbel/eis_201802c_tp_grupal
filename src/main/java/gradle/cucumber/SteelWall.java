@@ -5,6 +5,7 @@ public class SteelWall extends Wall {
         super(laberinto, location);
     }
 
+    @Override
     public void boom(){
 
     }
