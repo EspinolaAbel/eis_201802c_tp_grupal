@@ -37,7 +37,7 @@ public class BombermanStepdefs {
 
     @When("^intenta desplazarse a la celda ocupada por una pared en x:\"([^\"]*)\" y:\"([^\"]*)\"$")
     public void intenta_desplazarse_a_la_celda_ocupada_por_una_pared_en_x_y(String x, String y) {
-        Location location = new Location(Integer.parseInt(x), Integer.parseInt(y));
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
         new Wall(this.laberinto, location);
 
         this.bomberman.move(Direction.RIGHT);
@@ -108,7 +108,32 @@ public class BombermanStepdefs {
 
     @Then("^La pared de melamina en x:\"([^\"]*)\" y:\"([^\"]*)\" desaparece por la onda expansiva$")
     public void la_pared_de_melamina_en_x_y_desaparece_por_la_onda_expansiva(String x, String y) {
-        Location location = new Location(Integer.parseInt(x), Integer.parseInt(y));
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        assert(!location.existWall());
+    }
+
+    @Given("^Un enemigo en posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void un_enemigo_en_posicion_x_y(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        new Enemy(this.laberinto, location);
+    }
+
+    @Then("^El enemigo de la posicion x:\"([^\"]*)\" y:\"([^\"]*)\" muere por la onda expansiva$")
+    public void el_enemigo_de_la_posicion_x_y_muere_por_la_onda_expansiva(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+
+        assert(location.existEnemy());
+    }
+
+    @Given("^Una pared de acero en x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void una_pared_de_acero_en_x_y(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        new SteelWall(this.laberinto, location);
+    }
+
+    @Then("^La pared de acero en x:\"([^\"]*)\" y:\"([^\"]*)\" no desaparece por la onda expansiva$")
+    public void la_pared_de_acero_en_x_y_no_desaparece_por_la_onda_expansiva(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
         assert(!location.existWall());
     }
 
