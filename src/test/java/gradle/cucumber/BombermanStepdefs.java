@@ -1,21 +1,17 @@
 package gradle.cucumber;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class BombermanStepdefs {
 
     private Bomberman bomberman;
     private Maze laberinto;
+    private TicksController ticksController;
 
 
     @Given("^Bomberman y un laberinto de \"([^\"]*)\" por \"([^\"]*)\"$")
@@ -39,11 +35,10 @@ public class BombermanStepdefs {
 
 
 
-    @When("^intenta desplazarse a la celda ocupada por una pared$")
-    public void intentaDesplazarseALaCeldaOcupadaPorUnaPared() throws Throwable {
-        Wall pared = new Wall(1,0);
-
-        this.laberinto.setLocationAt(pared, pared.getXCoordinate(), pared.getYCoordinate());
+    @When("^intenta desplazarse a la celda ocupada por una pared en x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void intenta_desplazarse_a_la_celda_ocupada_por_una_pared_en_x_y(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        new Wall(this.laberinto, location);
 
         this.bomberman.move(Direction.RIGHT);
     }
@@ -51,7 +46,7 @@ public class BombermanStepdefs {
     @Then("^Bomberman no se mueve de lugar$")
     public void bombermanNoSeMueveDeLugar() throws Throwable {
         Location celdaContigua = this.laberinto.getLocation(1, 0);
-        assertThat(celdaContigua.getItems(), not(hasItem(this.bomberman)));
+        assert(celdaContigua.hasItem(this.bomberman));
     }
 
 
@@ -74,6 +69,72 @@ public class BombermanStepdefs {
     @Then("^Bomberman muere$")
     public void bombermanMuere() throws Throwable {
         assertFalse(this.bomberman.isAlive());
+    }
+
+
+    /* ----------- BOMBAS ------------ */
+
+
+    @Given("^Un controlador de ticks$")
+    public void un_controlador_de_ticks() {
+        this.ticksController = new TicksController();
+    }
+
+    @Given("^Una pared de melamina en x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void una_pared_de_melamina_en_x_y(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        new MelamineWall(this.laberinto, location);
+    }
+
+    @When("^Bomberman pone una Bomba en la celda donde esta ubicado con \"([^\"]*)\" ticks$")
+    public void bomberman_pone_una_Bomba_en_la_celda_donde_esta_ubicado_con_ticks(String ticks) {
+        this.bomberman.dropBomb(Integer.parseInt(ticks), ticksController);
+
+        Location bombLocation = this.bomberman.getCurrentLocation();
+
+        assert(bombLocation.existBomb());
+    }
+
+    @Then("^La bomba explota despues de \"([^\"]*)\" ticks de bomberman y tiene onda expansiva con radio de 3 celdas")
+    public void la_bomba_explota_despues_de_ticks_de_bomberman_y_tiene_onda_expansiva_de_radio(String ticks) {
+        Location bombLocation = this.bomberman.getCurrentLocation();
+
+        for (int i = 0; i < 3; i++) {
+            this.ticksController.tick();
+        }
+
+        assert(!bombLocation.existBomb());
+    }
+
+    @Then("^La pared de melamina en x:\"([^\"]*)\" y:\"([^\"]*)\" desaparece por la onda expansiva$")
+    public void la_pared_de_melamina_en_x_y_desaparece_por_la_onda_expansiva(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        assert(!location.existWall());
+    }
+
+    @Given("^Un enemigo en posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void un_enemigo_en_posicion_x_y(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        new Enemy(this.laberinto, location);
+    }
+
+    @Then("^El enemigo de la posicion x:\"([^\"]*)\" y:\"([^\"]*)\" muere por la onda expansiva$")
+    public void el_enemigo_de_la_posicion_x_y_muere_por_la_onda_expansiva(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+
+        assert(location.existEnemy());
+    }
+
+    @Given("^Una pared de acero en x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void una_pared_de_acero_en_x_y(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        new SteelWall(this.laberinto, location);
+    }
+
+    @Then("^La pared de acero en x:\"([^\"]*)\" y:\"([^\"]*)\" no desaparece por la onda expansiva$")
+    public void la_pared_de_acero_en_x_y_no_desaparece_por_la_onda_expansiva(String x, String y) {
+        Location location = this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+        assert(!location.existWall());
     }
 
 }

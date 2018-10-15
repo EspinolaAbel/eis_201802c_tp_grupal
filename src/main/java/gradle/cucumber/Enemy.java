@@ -6,6 +6,14 @@ public class Enemy extends Item {
         super(maze);
     }
 
+    public Enemy(Maze maze, Location location){
+        super(maze, location);
+    }
+
+    public void boom(){
+        this.getCurrentLocation().removeItem(this);
+    }
+
     @Override
     protected void interactsWith(Item otherItem) {
         Class<? extends Item> aClass = otherItem.getClass();

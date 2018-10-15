@@ -1,5 +1,6 @@
 package gradle.cucumber;
 
+import java.util.HashSet;
 import java.util.List;
 
 public abstract class Item {
@@ -13,6 +14,15 @@ public abstract class Item {
         this.alive = true;
     }
 
+    public Item(Maze maze, Location location){
+        this.maze = maze;
+        this.alive = true;
+        this.currentLocation = location;
+        this.currentLocation.addItem(this);
+    }
+
+    public abstract void boom();
+
     public Location getCurrentLocation() {
         return currentLocation;
     }
@@ -24,7 +34,7 @@ public abstract class Item {
     public void move(Direction direction) {
         this.maze.move(this, direction);
 
-        List<Item> items = this.currentLocation.getItems();
+        HashSet<Item> items = this.currentLocation.getItems();
 
         items.stream().forEach((item)->{
             if (!item.equals(this))
