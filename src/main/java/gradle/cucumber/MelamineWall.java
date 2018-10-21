@@ -5,6 +5,7 @@ public class MelamineWall extends Wall {
         super(maze, location);
     }
 
+    @Override
     public void boom(){
         this.getCurrentLocation().removeItem(this);
     }

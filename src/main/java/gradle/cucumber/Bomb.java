@@ -2,16 +2,17 @@ package gradle.cucumber;
 
 public class Bomb extends Item{
     private Integer ticks;
+    private TicksController ticksController;
 
     public Bomb(Maze maze, Location currentLocation, Integer ticks) {
-        super(maze);
-        this.setCurrentLocation(currentLocation);
+        super(maze, currentLocation);
         this.ticks = ticks;
     }
 
     @Override
     public void boom() {
-        this.getCurrentLocation().removeItem(this);
+        this.alive = false;
+        this.ticksController.removeBomb(this);
     }
 
     @Override
@@ -38,5 +39,9 @@ public class Bomb extends Item{
             this.getCurrentLocation().boom();
             this.boomExpansive();
         }
+    }
+
+    public void setTicksController(TicksController ticksController) {
+        this.ticksController = ticksController;
     }
 }
