@@ -15,7 +15,7 @@ Ejercitar la escritura de código en ambientes colaborativos utilizando una meto
 Nro | Nombre        | Legajo | Mail
 ----|---------------|--------|--------------------------
 1   | Abel Espínola | 31873  | espinola.abel.e@gmail.com
-2   |               |        |
+2   | Julian Uriel Espnoza | 36557 | uriel.espinoza@alu.unq.edu.ar
 3   |               |        |
 4   |               |        |
     
