@@ -27,18 +27,20 @@ public class Bomberman extends Item {
 
     }
 
-    public void dropBomb(Integer ticks, TicksController ticksController) {
+    public Bomb dropBomb(Integer ticks, TicksController ticksController) {
         Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
         bomb.setTicksController(ticksController);
         ticksController.addBomb(bomb);
+        return bomb;
     }
 
-    public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction) {
-        if (this.hasThrowBombPower()) {
-            Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
-            bomb.setTicksController(ticksController);
-            ticksController.addBomb(bomb);
-            bomb.moveXToDir(cant, direction);
+
+    public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction){
+        if (this.hasJumpOrMultiBomb()){
+            dropBomb(ticks,ticksController).moveXToDir(cant,direction);
+            dropBomb(ticks,ticksController).moveXToDir(cant+3,direction);
+        } else if (this.hasThrowBombPower()){
+            dropBomb(ticks,ticksController).moveXToDir(cant,direction);
         }
     }
 
@@ -47,11 +49,15 @@ public class Bomberman extends Item {
     }
 
     public boolean hasThrowBombPower() {
-        return this.powers.stream().anyMatch(p -> p instanceof ThrowBombPower);
+        return this.powers.stream().anyMatch(p -> p.throwBombPower());
     }
 
     public boolean hasJumpAnyWallPower() {
-        return this.powers.stream().anyMatch(p -> p instanceof JumpAnyWallPower);
+        return this.powers.stream().anyMatch(p -> p.jumpAnyWallPower());
+    }
+
+    public boolean hasJumpOrMultiBomb(){
+        return this.powers.stream().anyMatch(p -> p.multiBombPower());
     }
 
 }

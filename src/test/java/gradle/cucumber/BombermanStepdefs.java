@@ -203,10 +203,18 @@ public class BombermanStepdefs {
         assertTrue(location.existBomb());
     }
 
+
     @Given("^Un enemigo de tipo Proto Max Jr en la posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
     public void un_enemigo_de_tipo_Proto_Max_Jr_en_la_posicion_x_y(String x, String y) {
         Location location = this.getLocationFromStrings(x, y);
         new ProtoMaxJr(this.laberinto, location);
+    }
+
+    @Given("^Un enemigo de tipo Proto-Max Units en la posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void un_enemigo_de_tipo_ProtpMaxUnits_en_la_posicion_x_y(String x, String y) {
+        Location location = this.getLocationFromStrings(x, y);
+        new ProtoMaxUnits(this.laberinto, location);
+
 
         assertTrue(location.existEnemy());
     }
@@ -232,8 +240,40 @@ public class BombermanStepdefs {
     }
 
 
+
+    @Given("^Un Power de tipo JumpOrMultiBomb en la posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void un_Power_de_tipo_JumpOrMultibomb_en_la_posicion_x_y(String x, String y) {
+        Location location = this.getLocationFromStrings(x, y);
+
+        new JumpOrMultiBombPower(this.laberinto, location);
+    }
+
+    @Then("^Bomberman tiene el Power de tipo JumpOrMultibomb$")
+    public void bomberman_tiene_el_Power_de_tipo_JumpOrMultibomb() {
+        assertTrue(this.bomberman.hasJumpOrMultiBomb());
+    }
+
     private Location getLocationFromStrings(String x, String y){
         return this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
+    }
+
+    @Given("^Bomberman con Power de tipo JumpOrMultibomb$")
+    public void bomberman_con_Power_de_tipo_JumpOrMultiBomb() {
+        this.bomberman.addPower(new JumpOrMultiBombPower(this.laberinto, this.bomberman.getCurrentLocation()));
+    }
+
+    @Then("^Hay una bomba \"([^\"]*)\" celdas mas al \"([^\"]*)\" de donde esta Bomberman$")
+    public void hay_una_bomba_tantas_celdas_en_direccion_de_donde_esta_bomberman(String cant, String dir) {
+        Location locationBomberman = bomberman.getCurrentLocation();
+        Integer cantidadCeldas = Integer.parseInt(cant);
+        Direction directionWhereToLook = this.getDirection(dir.toLowerCase());
+
+        int xCoord = locationBomberman.getXCoordinate() + directionWhereToLook.getxCoord() * cantidadCeldas;
+        int yCoord = locationBomberman.getYCoordinate() + directionWhereToLook.getyCoord() * cantidadCeldas;
+
+        Location locationWhereToLook = laberinto.getLocation(xCoord, yCoord);
+
+        assertTrue(locationWhereToLook.existBomb());
     }
 
     private Direction getDirection(String dir){

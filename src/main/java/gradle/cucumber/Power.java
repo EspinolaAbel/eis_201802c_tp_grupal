@@ -17,4 +17,17 @@ public class Power extends Item {
             bomberman.addPower(this);
         }
     }
+
+    public boolean throwBombPower() {
+        return false;
+    }
+
+    public boolean jumpAnyWallPower() {
+        return false;
+    }
+
+
+    public boolean multiBombPower(){
+        return false;
+    }
 }
