@@ -33,12 +33,22 @@ public class Bomberman extends Item {
         ticksController.addBomb(bomb);
     }
 
-    public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction) {
-        if (this.hasThrowBombPower()) {
+
+    public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction){
+        if (this.hasJumpOrMultiBomb()){
             Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
+            Bomb bomb2 = new Bomb(this.maze, this.getCurrentLocation(), ticks);
             bomb.setTicksController(ticksController);
+            bomb2.setTicksController(ticksController);
             ticksController.addBomb(bomb);
+            ticksController.addBomb(bomb2);
             bomb.moveXToDir(cant, direction);
+            bomb2.moveXToDir(cant+3, direction);
+        } else if (this.hasThrowBombPower()){
+                Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
+                bomb.setTicksController(ticksController);
+                ticksController.addBomb(bomb);
+                bomb.moveXToDir(cant, direction);
         }
     }
 
@@ -52,6 +62,11 @@ public class Bomberman extends Item {
 
     public boolean hasJumpAnyWallPower() {
         return this.powers.stream().anyMatch(p -> p instanceof JumpAnyWallPower);
+    }
+
+
+    public boolean hasJumpOrMultiBomb(){
+        return this.powers.stream().anyMatch(p -> p instanceof JumpOrMultiBombPower);
     }
 
 }
