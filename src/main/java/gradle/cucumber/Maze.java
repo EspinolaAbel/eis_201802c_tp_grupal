@@ -27,11 +27,17 @@ public class Maze {
                 this.map[j][i] = new Ground(i, j); // por defecto, t0do va a ser Ground
     }
 
-    public void move(Item item, Direction directionWhereToMove) {
+    public void move(Item item, Direction dirToMove) {
         final Location location = this.findItemLocation(item);
         try {
-            int xCoord = location.getXCoordinate() + directionWhereToMove.getxCoord();
-            int yCoord = location.getYCoordinate() + directionWhereToMove.getyCoord();
+            Boolean bool = item instanceof Bomberman && ((Bomberman) item).hasJumpAnyWallPower();
+            if (bool){
+                this.jumpTheWall(item,dirToMove);
+                return;
+            }
+
+            int xCoord = location.getXCoordinate() + dirToMove.getxCoord();
+            int yCoord = location.getYCoordinate() + dirToMove.getyCoord();
 
             Location nextLocation = this.getLocation(xCoord, yCoord);
 
@@ -39,6 +45,39 @@ public class Maze {
                 this.moveItemToLocation(item, nextLocation);
         } catch (ArrayIndexOutOfBoundsException e) { /* do nothing */ }
     }
+
+    private void jumpTheWall(Item bomberman, Direction dirToMove) {
+        final Location location = this.findItemLocation(bomberman);
+        try{
+            if (isDirectionTo(dirToMove,Direction.UP)) {
+                Location nextLocation = this.getLocationWithDir(location,0,2);
+                this.moveItemToLocation(bomberman, nextLocation);
+            }
+            if (isDirectionTo(dirToMove,Direction.RIGHT)) {
+                Location nextLocation = this.getLocationWithDir(location,2,0);
+                this.moveItemToLocation(bomberman, nextLocation);
+            }
+            if (isDirectionTo(dirToMove,Direction.LEFT)) {
+                Location nextLocation = this.getLocationWithDir(location,-2,0);
+                this.moveItemToLocation(bomberman, nextLocation);
+            }
+            if (isDirectionTo(dirToMove,Direction.DOWN)) {
+                Location nextLocation = this.getLocationWithDir(location,0,-2);
+                this.moveItemToLocation(bomberman, nextLocation);
+            }
+
+        }catch (ArrayIndexOutOfBoundsException e) { /* do nothing */ }
+    }
+
+    private Location getLocationWithDir(Location location, int x, int y) {
+        int xCoord = location.getXCoordinate() + x;
+        int yCoord = location.getXCoordinate() + y;
+        Location loc = this.getLocation(xCoord,yCoord);
+        return this.getLocation(xCoord,yCoord);
+    }
+
+    private boolean isDirectionTo(Direction dir1, Direction dir2) { return dir1.equals(dir2); }
+
 
     private void moveItemToLocation(Item item, Location nextLocation) {
         Location location = item.getCurrentLocation();

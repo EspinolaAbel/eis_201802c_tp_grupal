@@ -219,6 +219,19 @@ public class BombermanStepdefs {
     }
 
 
+    @Given("^Un Power de tipo JumpAnyWall en la posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void un_Power_de_tipo_JumpAnyWall_en_la_posicion_x_y(String x, String y) {
+        Location location = this.getLocationFromStrings(x, y);
+
+        new JumpAnyWallPower(this.laberinto, location);
+    }
+
+    @Then("^Bomberman tiene el Power de tipo saltar cualquier pared$")
+    public void bomberman_tiene_el_Power_de_tipo_saltar_cualquier_pared() {
+            assertTrue(this.bomberman.hasJumpAnyWallPower());
+    }
+
+
     private Location getLocationFromStrings(String x, String y){
         return this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
     }
@@ -237,5 +250,25 @@ public class BombermanStepdefs {
         }
 
         return direction;
+    }
+
+
+    @Given("^Bomberman con Power de tipo JumpAnyWall$")
+    public void bomberman_con_Power_de_tipo_JumpAnyWall() {
+        this.bomberman.addPower(new JumpAnyWallPower(this.laberinto, this.bomberman.getCurrentLocation()));
+    }
+
+    @When("^Bomberman se desplaza hacia el este$")
+    public void bomberman_se_desplaza_hacia_el_este() {
+        // Write code here that turns the phrase above into concrete actions
+        this.bomberman.move(Direction.RIGHT);
+    }
+
+    @Then("^Bomberman debe quedar en la celda x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void bomberman_debe_quedar_en_la_celda_x_y(String x, String y) {
+        // verifico que este bien en x
+        assertEquals(Integer.parseInt(x),this.bomberman.getCurrentLocation().getXCoordinate());
+        // ...y en y
+        assertEquals(Integer.parseInt(y),this.bomberman.getCurrentLocation().getYCoordinate());
     }
 }
