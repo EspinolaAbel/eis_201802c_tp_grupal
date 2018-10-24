@@ -57,16 +57,15 @@ public class Bomberman extends Item {
     }
 
     public boolean hasThrowBombPower() {
-        return this.powers.stream().anyMatch(p -> p instanceof ThrowBombPower);
+        return this.powers.stream().anyMatch(p -> p.throwBombPower());
     }
 
     public boolean hasJumpAnyWallPower() {
-        return this.powers.stream().anyMatch(p -> p instanceof JumpAnyWallPower);
+        return this.powers.stream().anyMatch(p -> p.jumpAnyWallPower());
     }
 
-
     public boolean hasJumpOrMultiBomb(){
-        return this.powers.stream().anyMatch(p -> p instanceof JumpOrMultiBombPower);
+        return this.powers.stream().anyMatch(p -> p.multiBombPower());
     }
 
 }

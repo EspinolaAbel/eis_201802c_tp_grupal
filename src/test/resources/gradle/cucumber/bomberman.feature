@@ -104,3 +104,9 @@ Feature: Bomberman Behavior
     Then Hay una bomba "2" celdas mas al "Este" de donde esta Bomberman
     Then Hay una bomba "5" celdas mas al "Este" de donde esta Bomberman
 
+    Given Bomberman y un laberinto de "4" por "4"
+    And Un controlador de ticks
+    And Una pared de melamina en x:"1" y:"0"
+    And Bomberman con Power de tipo JumpOrMultibomb
+    When Bomberman se desplaza hacia el este
+    Then Bomberman debe quedar en la celda x:"2" y:"0"
