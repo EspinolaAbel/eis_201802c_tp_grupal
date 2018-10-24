@@ -27,28 +27,20 @@ public class Bomberman extends Item {
 
     }
 
-    public void dropBomb(Integer ticks, TicksController ticksController) {
+    public Bomb dropBomb(Integer ticks, TicksController ticksController) {
         Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
         bomb.setTicksController(ticksController);
         ticksController.addBomb(bomb);
+        return bomb;
     }
 
 
     public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction){
         if (this.hasJumpOrMultiBomb()){
-            Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
-            Bomb bomb2 = new Bomb(this.maze, this.getCurrentLocation(), ticks);
-            bomb.setTicksController(ticksController);
-            bomb2.setTicksController(ticksController);
-            ticksController.addBomb(bomb);
-            ticksController.addBomb(bomb2);
-            bomb.moveXToDir(cant, direction);
-            bomb2.moveXToDir(cant+3, direction);
+            dropBomb(ticks,ticksController).moveXToDir(cant,direction);
+            dropBomb(ticks,ticksController).moveXToDir(cant+3,direction);
         } else if (this.hasThrowBombPower()){
-                Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
-                bomb.setTicksController(ticksController);
-                ticksController.addBomb(bomb);
-                bomb.moveXToDir(cant, direction);
+            dropBomb(ticks,ticksController).moveXToDir(cant,direction);
         }
     }
 
