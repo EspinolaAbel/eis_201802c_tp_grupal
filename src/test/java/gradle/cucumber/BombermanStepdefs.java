@@ -203,6 +203,22 @@ public class BombermanStepdefs {
         assertTrue(location.existBomb());
     }
 
+    @Given("^Un enemigo de tipo Proto Max Jr en la posicion x:\"([^\"]*)\" y:\"([^\"]*)\"$")
+    public void un_enemigo_de_tipo_Proto_Max_Jr_en_la_posicion_x_y(String x, String y) {
+        Location location = this.getLocationFromStrings(x, y);
+        new ProtoMaxJr(this.laberinto, location);
+
+        assertTrue(location.existEnemy());
+    }
+
+    @Then("^El enemigo suelta el poder para saltar todo tipo de pared en la posicion x:\"([^\"]*)\" y:\"([^\"]*)\" donde muere$")
+    public void el_enemigo_suelta_el_poder_para_saltar_todo_tipo_de_pared_en_la_posicion_x_y_donde_muere(String x, String y) {
+        Location location = this.getLocationFromStrings(x, y);
+
+        assertTrue(location.existPower());
+    }
+
+
     private Location getLocationFromStrings(String x, String y){
         return this.laberinto.getLocation(Integer.parseInt(x), Integer.parseInt(y));
     }
