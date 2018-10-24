@@ -9,8 +9,9 @@ public class Bomberman extends Item {
     /**
      * Constructor para crear un nuevo {@link Bomberman}.
      * Este recibe como parámetro un {@link Maze} con el cual interactuar
+     *
      * @param maze
-     * */
+     */
     public Bomberman(Maze maze) {
         super(maze);
         this.powers = new HashSet<>();
@@ -32,8 +33,8 @@ public class Bomberman extends Item {
         ticksController.addBomb(bomb);
     }
 
-    public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction){
-        if (this.hasThrowBombPower()){
+    public void throwBomb(Integer ticks, TicksController ticksController, Integer cant, Direction direction) {
+        if (this.hasThrowBombPower()) {
             Bomb bomb = new Bomb(this.maze, this.getCurrentLocation(), ticks);
             bomb.setTicksController(ticksController);
             ticksController.addBomb(bomb);
@@ -41,11 +42,16 @@ public class Bomberman extends Item {
         }
     }
 
-    public void addPower(Power power){
+    public void addPower(Power power) {
         this.powers.add(power);
     }
 
-    public boolean hasThrowBombPower(){
+    public boolean hasThrowBombPower() {
         return this.powers.stream().anyMatch(p -> p instanceof ThrowBombPower);
     }
+
+    public boolean hasJumpAnyWallPower() {
+        return this.powers.stream().anyMatch(p -> p instanceof JumpAnyWallPower);
+    }
+
 }
